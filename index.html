@@ -262,10 +262,11 @@ select { cursor:pointer; appearance:none; background-image:url("data:image/svg+x
           </select>
         </div>
         <div class="form-group">
-          <label>Delivery Preference</label>
+          <label>Service Type</label>
           <div class="toggle-group" id="deliveryToggle">
             <button type="button" class="toggle-btn" data-val="pickup" onclick="setDeliveryMode('pickup',this)">Pickup</button>
             <button type="button" class="toggle-btn active" data-val="delivery" onclick="setDeliveryMode('delivery',this)">Delivery</button>
+            <button type="button" class="toggle-btn" data-val="inhouse" onclick="setDeliveryMode('inhouse',this)">In-House</button>
           </div>
         </div>
       </div>
@@ -407,7 +408,7 @@ function setDeliveryMode(mode, btn) {
   btn.classList.add('active');
   const section = document.getElementById('deliveryFeeSection');
   section.style.display = mode === 'delivery' ? 'block' : 'none';
-  if (mode === 'pickup') {
+  if (mode !== 'delivery') {
     document.getElementById('deliveryDistance').value = '';
     document.getElementById('deliveryAddress').value = '';
     document.getElementById('deliveryFeeDisplay').style.display = 'none';
@@ -555,7 +556,8 @@ function generateSummary() {
   if (eventType) s += `  Event Type: ${eventType}\n`;
   if (venue) s += `  Venue: ${venue}\n`;
   s += `  Format: ${formatLabels[formState.format]}\n`;
-  s += `  Delivery: ${formState.delivery === 'delivery' ? 'Delivery' : 'Pickup'}\n`;
+  const deliveryLabels = { delivery: 'Delivery', pickup: 'Pickup', inhouse: 'In-House' };
+  s += `  Service: ${deliveryLabels[formState.delivery]}\n`;
   if (formState.delivery === 'delivery') {
     const addr = document.getElementById('deliveryAddress').value.trim();
     if (formState.deliveryTier) {
