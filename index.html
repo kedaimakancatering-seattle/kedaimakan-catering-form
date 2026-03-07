@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Book Kedai Makan for your next event. Fill out our catering inquiry form to get started.">
+<meta property="og:title" content="Kedai Makan — Catering Inquiry">
+<meta property="og:description" content="Southeast Asian catering in Seattle. Fill out our inquiry form to get a custom quote.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍜</text></svg>">
+<title>Kedai Makan — Catering Inquiry</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+:root {
+  --primary: #0e0e0e;
+  --gold: #d1bf47;
+  --gold-warm: #e7bd74;
+  --red: #e74c3c;
+  --green: #4caf50;
+  --bg: #0e0e0e;
+  --card: rgba(255,255,255,0.04);
+  --card-border: rgba(255,255,255,0.08);
+  --text: rgba(255,255,255,0.8);
+  --text-dim: rgba(255,255,255,0.4);
+  --input-bg: #fafafa;
+  --radius: 0px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Lato',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+h1,h2,h3 { font-weight:700; }
+
+/* Header */
+.header { background:var(--primary); padding:48px 0 40px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.06); }
+.header h1 { font-size:42px; color:rgba(255,255,255,0.9); text-transform:uppercase; letter-spacing:2px; font-weight:900; }
+.header p { color:var(--gold); font-size:14px; margin-top:6px; letter-spacing:1.5px; text-transform:uppercase; font-weight:400; }
+
+/* Container */
+.container { max-width:700px; margin:0 auto; padding:40px 20px 60px; }
+
+/* Cards */
+.card { background:var(--card); border:1px solid var(--card-border); border-radius:var(--radius); padding:32px; margin-bottom:24px; }
+.card h2 { font-size:18px; margin-bottom:24px; color:var(--gold); text-transform:uppercase; letter-spacing:1.5px; font-weight:400; }
+
+/* Form */
+label { display:block; font-size:12px; font-weight:400; margin-bottom:6px; color:var(--text); letter-spacing:0.02em; }
+input[type="text"], input[type="email"], input[type="tel"], input[type="number"],
+input[type="date"], input[type="time"], textarea, select {
+  width:100%; padding:10px; border:0.8px solid #a9a9a9; border-radius:0;
+  font-size:14px; font-family:inherit; background:var(--input-bg); transition:all .2s; color:#000;
+}
+input:focus, select:focus, textarea:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 2px rgba(209,191,71,0.15); }
+textarea { resize:vertical; min-height:80px; }
+select { cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; background-color:var(--input-bg); padding-right:36px; }
+
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:16px; }
+.form-group { margin-bottom:16px; }
+.required::after { content:' (required)'; color:var(--text-dim); font-weight:300; font-size:11px; text-transform:none; }
+
+/* Toggle */
+.toggle-group { display:flex; gap:0; overflow:hidden; border:0.8px solid rgba(255,255,255,0.15); background:transparent; }
+.toggle-btn { flex:1; padding:10px 14px; text-align:center; font-size:13px; font-weight:400; font-family:inherit;
+  background:transparent; color:var(--text-dim); border:none; cursor:pointer; transition:all .2s; letter-spacing:0.5px; }
+.toggle-btn.active { background:rgba(209,191,71,0.15); color:var(--gold); border-bottom:2px solid var(--gold); }
+.toggle-btn:hover:not(.active) { background:rgba(255,255,255,0.04); color:var(--text); }
+
+/* Checkbox grid */
+.check-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(170px,1fr)); gap:8px; }
+.check-item { display:flex; align-items:center; gap:8px; padding:10px 14px;
+  border:0.8px solid rgba(255,255,255,0.12); background:transparent; cursor:pointer; transition:all .2s; }
+.check-item:hover { border-color:rgba(255,255,255,0.25); }
+.check-item.checked { border-color:var(--gold); background:rgba(209,191,71,0.08); }
+.check-item input[type="checkbox"] { accent-color:var(--gold); width:16px; height:16px; cursor:pointer; }
+.check-item label { margin:0; font-size:13px; text-transform:none; letter-spacing:0; color:var(--text); font-weight:400; cursor:pointer; }
+.check-item .guest-count { width:50px; text-align:center; padding:4px 6px; font-size:12px; border-radius:0; margin-left:auto; background:var(--input-bg); color:#000; }
+
+/* Buttons */
+.btn { padding:12px 24px; font-size:14px; font-weight:400; font-family:inherit;
+  border:none; cursor:pointer; transition:all .15s; letter-spacing:1px; }
+.btn-submit { background:#272727; color:#fff; width:100%; font-size:14px; padding:16px 40px;
+  text-transform:uppercase; letter-spacing:1.5px; }
+.btn-submit:hover { background:#3a3a3a; }
+.btn-submit:disabled { background:#1a1a1a; color:rgba(255,255,255,0.3); cursor:not-allowed; }
+
+/* Validation */
+.field-error { border-color:var(--red)!important; box-shadow:0 0 0 2px rgba(231,76,60,0.15)!important; }
+.error-msg { color:var(--red); font-size:12px; margin-top:4px; display:none; }
+.error-msg.show { display:block; }
+
+/* Success overlay */
+.success-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100; display:flex;
+  align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .3s; backdrop-filter:blur(4px); }
+.success-overlay.show { opacity:1; pointer-events:auto; }
+.success-card { background:#1a1a1a; border:1px solid rgba(255,255,255,0.1); padding:40px 36px; max-width:420px; width:90%;
+  text-align:center; }
+.success-card .check-icon { width:56px; height:56px; border-radius:50%; background:rgba(209,191,71,0.1); color:var(--gold);
+  display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:28px; }
+.success-card h2 { font-size:18px; margin-bottom:8px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; font-weight:400; }
+.success-card p { font-size:13px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
+.success-card .btn-row { display:flex; gap:8px; justify-content:center; }
+.success-card .btn-sm { padding:10px 20px; font-size:12px; font-weight:400; font-family:inherit; border:none; cursor:pointer;
+  letter-spacing:1px; text-transform:uppercase; }
+.success-card .btn-outline { background:transparent; border:0.8px solid rgba(255,255,255,0.2); color:var(--text); }
+.success-card .btn-outline:hover { background:rgba(255,255,255,0.05); }
+.success-card .btn-accent { background:var(--gold); color:#0e0e0e; }
+.success-card .btn-accent:hover { background:#bfad3f; }
+
+/* Lanterns */
+.lanterns { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.lantern { position:absolute; border-radius:50%; opacity:0.5; }
+.lantern::before { content:''; position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+  width:4px; height:6px; background:rgba(255,255,255,0.15); border-radius:1px; }
+.lantern::after { content:''; position:absolute; top:15%; left:25%; width:35%; height:25%;
+  background:rgba(255,255,255,0.15); border-radius:50%; }
+.l1 { width:28px; height:32px; background:#c0392b; top:8%; left:5%; opacity:0.4; }
+.l2 { width:22px; height:26px; background:#e67e22; top:15%; right:8%; opacity:0.35; }
+.l3 { width:26px; height:30px; background:#27ae60; top:25%; left:3%; opacity:0.3; }
+.l4 { width:20px; height:24px; background:#d4ac0d; top:35%; right:4%; opacity:0.35; }
+.l5 { width:24px; height:28px; background:#8e44ad; top:48%; left:6%; opacity:0.3; }
+.l6 { width:18px; height:22px; background:#c0392b; top:58%; right:6%; opacity:0.25; }
+.l7 { width:22px; height:26px; background:#e67e22; top:68%; left:4%; opacity:0.3; }
+.l8 { width:26px; height:30px; background:#27ae60; top:78%; right:5%; opacity:0.25; }
+.l9 { width:20px; height:24px; background:#d4ac0d; top:88%; left:7%; opacity:0.3; }
+.l10 { width:24px; height:28px; background:#8e44ad; top:5%; left:50%; opacity:0.15; }
+.l11 { width:18px; height:22px; background:#c0392b; top:42%; right:2%; opacity:0.2; }
+.l12 { width:22px; height:26px; background:#27ae60; top:92%; right:3%; opacity:0.2; }
+.container, .header { position:relative; z-index:1; }
+
+/* Footer */
+.footer { text-align:center; padding:24px; font-size:12px; color:rgba(255,255,255,0.3); letter-spacing:0.5px; position:relative; z-index:1; }
+
+/* Responsive */
+@media(max-width:600px) {
+  .form-row { grid-template-columns:1fr; }
+  .check-grid { grid-template-columns:1fr 1fr; }
+  .container { padding:24px 16px 48px; }
+  .header h1 { font-size:28px; }
+}
+</style>
+</head>
+<body>
+
+<div class="lanterns">
+  <div class="lantern l1"></div><div class="lantern l2"></div><div class="lantern l3"></div>
+  <div class="lantern l4"></div><div class="lantern l5"></div><div class="lantern l6"></div>
+  <div class="lantern l7"></div><div class="lantern l8"></div><div class="lantern l9"></div>
+  <div class="lantern l10"></div><div class="lantern l11"></div><div class="lantern l12"></div>
+</div>
+
+<div class="header">
+  <h1>Kedai <span>Makan</span></h1>
+  <p>Catering Inquiry Form</p>
+</div>
+
+<div class="container">
+  <form id="intakeForm" novalidate>
+
+    <!-- Contact Information -->
+    <div class="card">
+      <h2>Contact Information</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="required">Full Name</label>
+          <input type="text" id="fullName" placeholder="e.g. Jane Smith" required>
+          <div class="error-msg" id="fullNameError">Please enter your name</div>
+        </div>
+        <div class="form-group">
+          <label class="required">Email</label>
+          <input type="email" id="email" placeholder="e.g. jane@company.com" required>
+          <div class="error-msg" id="emailError">Please enter a valid email</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="e.g. (206) 555-1234">
+        </div>
+        <div class="form-group">
+          <label>Company / Organization</label>
+          <input type="text" id="company" placeholder="e.g. Acme Corp">
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Details -->
+    <div class="card">
+      <h2>Event Details</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="required">Event Date</label>
+          <input type="date" id="eventDate" required>
+          <div class="error-msg" id="eventDateError">Please select an event date</div>
+        </div>
+        <div class="form-group">
+          <label>Event Time</label>
+          <input type="time" id="eventTime">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="required">Estimated Guest Count</label>
+          <input type="number" id="guestCount" min="1" placeholder="e.g. 50" required>
+          <div class="error-msg" id="guestCountError">Please enter the number of guests</div>
+        </div>
+        <div class="form-group">
+          <label>Event Type</label>
+          <select id="eventType">
+            <option value="">Select type...</option>
+            <option>Corporate</option>
+            <option>Wedding</option>
+            <option>Birthday</option>
+            <option>Holiday Party</option>
+            <option>Graduation</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Venue / Location</label>
+        <input type="text" id="venue" placeholder="e.g. 123 Main St, Seattle, WA">
+      </div>
+      <div class="form-group">
+        <label>Catering Format</label>
+        <div class="toggle-group" id="formatToggle">
+          <button type="button" class="toggle-btn" data-val="family" onclick="setToggle('format','family',this)">Family Style</button>
+          <button type="button" class="toggle-btn" data-val="boxed" onclick="setToggle('format','boxed',this)">Individual Boxed</button>
+          <button type="button" class="toggle-btn active" data-val="unsure" onclick="setToggle('format','unsure',this)">Not Sure</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dietary & Allergies -->
+    <div class="card">
+      <h2>Dietary & Allergy Information</h2>
+      <div class="form-group">
+        <label>Dietary Needs <span style="font-weight:400;text-transform:none;letter-spacing:0">(check all that apply, enter # of guests)</span></label>
+        <div class="check-grid" id="dietaryGrid"></div>
+      </div>
+      <div class="form-group" style="margin-top:20px">
+        <label>Allergens <span style="font-weight:400;text-transform:none;letter-spacing:0">(check all that apply)</span></label>
+        <div class="check-grid" id="allergenGrid"></div>
+      </div>
+      <div class="form-group" style="margin-top:16px">
+        <label>Additional Allergy / Dietary Details</label>
+        <textarea id="allergyNotes" placeholder="e.g. One guest has a severe shellfish allergy and needs all dishes to be prepared separately..."></textarea>
+      </div>
+    </div>
+
+    <!-- Preferences & Budget -->
+    <div class="card">
+      <h2>Preferences & Budget</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Budget Range</label>
+          <select id="budget">
+            <option value="">Select range...</option>
+            <option>Under $500</option>
+            <option>$500 – $1,000</option>
+            <option>$1,000 – $2,000</option>
+            <option>$2,000 – $5,000</option>
+            <option>$5,000+</option>
+            <option>Not Sure</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Service Type</label>
+          <div class="toggle-group" id="deliveryToggle">
+            <button type="button" class="toggle-btn" data-val="pickup" onclick="setDeliveryMode('pickup',this)">Pickup</button>
+            <button type="button" class="toggle-btn active" data-val="delivery" onclick="setDeliveryMode('delivery',this)">Delivery</button>
+            <button type="button" class="toggle-btn" data-val="inhouse" onclick="setDeliveryMode('inhouse',this)">In-House</button>
+          </div>
+        </div>
+      </div>
+      <div id="deliveryFeeSection">
+        <div class="form-group">
+          <label>Delivery Address</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="deliveryAddress" placeholder="e.g. 123 Main St, Seattle, WA 98101" style="flex:1">
+            <button type="button" id="calcFeeBtn" onclick="calculateDeliveryFee()"
+              style="white-space:nowrap;background:rgba(209,191,71,0.15);color:var(--gold);border:0.8px solid rgba(209,191,71,0.3);padding:10px 16px;font-size:12px;font-family:inherit;letter-spacing:0.5px;cursor:pointer">CALCULATE FEE</button>
+          </div>
+        </div>
+        <div id="deliveryFeeDisplay" style="padding:10px 14px;background:rgba(209,191,71,0.06);border:0.8px solid rgba(209,191,71,0.2);font-size:13px;margin-bottom:16px;display:none">
+          <span style="color:var(--gold);font-weight:700" id="feeAmount"></span>
+          <span style="color:var(--text-dim);margin-left:6px" id="feeNote"></span>
+        </div>
+        <div class="form-group">
+          <label>Delivery Distance <span style="font-weight:300;font-size:11px;text-transform:none;letter-spacing:0">(auto-calculated or select manually)</span></label>
+          <select id="deliveryDistance" onchange="updateDeliveryFee()">
+            <option value="">Select distance...</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Menu Preferences / Must-Haves</label>
+        <textarea id="menuPrefs" placeholder="e.g. We'd love Nasi Lemak as the main, and something sweet for dessert..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Anything Else We Should Know?</label>
+        <textarea id="otherNotes" placeholder="e.g. We need setup by 11:30am, tables and utensils included..."></textarea>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-submit">Submit Catering Inquiry</button>
+  </form>
+</div>
+
+<!-- Success Overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="check-icon">&#10003;</div>
+    <h2>Inquiry Submitted!</h2>
+    <p>Your catering inquiry has been sent directly to our team at Kedai Makan. We'll review your request and get back to you shortly!</p>
+    <div class="btn-row">
+      <button class="btn-sm btn-outline" onclick="closeSuccess()">Close</button>
+      <button class="btn-sm btn-accent" onclick="submitAnother()">Submit Another</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Kedai Makan Catering &bull; Seattle, WA</div>
+
+<script>
+// ===== CONFIG =====
+const CATERING_EMAIL = 'kedaimakancatering@gmail.com';
+const WEB3FORMS_KEY = '3f74c559-837f-4ab4-b168-ed5d4d2cc400';
+
+// ===== DELIVERY FEE TIERS (edit these to change fees) =====
+const DELIVERY_FEES = [
+  { label: '0 – 5 miles',   min: 0,  max: 5,     fee: 15,  note: '' },
+  { label: '5 – 10 miles',  min: 5,  max: 10,    fee: 25,  note: '' },
+  { label: '10 – 15 miles', min: 10, max: 15,    fee: 40,  note: '' },
+  { label: '15 – 20 miles', min: 15, max: 20,    fee: 60,  note: '' },
+  { label: '20 – 30 miles', min: 20, max: 30,    fee: 85,  note: '' },
+  { label: '30+ miles',     min: 30, max: 99999, fee: null, note: 'Contact us for a quote' },
+];
+
+// ===== RESTAURANT LOCATION (2234 1st Ave, Seattle, WA 98121) =====
+const RESTAURANT_COORDS = { lat: 47.61385, lng: -122.34847 };
+const ROAD_FACTOR = 1.3; // Multiplier to estimate driving distance from straight-line
+
+// ===== FORM DATA =====
+const DIETARY_OPTIONS = ['Vegetarian', 'Vegan', 'Gluten-Free', 'Halal', 'Kosher', 'Other'];
+const ALLERGEN_OPTIONS = ['Peanuts', 'Tree Nuts', 'Sesame', 'Dairy', 'Soy', 'Shellfish', 'Fish', 'Egg', 'Gluten'];
+
+const formState = {
+  format: 'unsure',
+  delivery: 'delivery',
+  deliveryTier: null,
+  dietary: {},
+  allergens: new Set()
+};
+
+// ===== RENDER GRIDS =====
+function renderDietaryGrid() {
+  const grid = document.getElementById('dietaryGrid');
+  grid.innerHTML = DIETARY_OPTIONS.map(d => `
+    <div class="check-item" onclick="toggleDietary(this, '${d}')">
+      <input type="checkbox" id="diet-${d}" onchange="toggleDietary(this.parentElement, '${d}')">
+      <label for="diet-${d}">${d}</label>
+      <input type="number" class="guest-count" min="0" placeholder="#" style="display:none"
+        id="dietCount-${d}" oninput="formState.dietary['${d}']={checked:true,count:this.value}" onclick="event.stopPropagation()">
+    </div>
+  `).join('');
+}
+
+function renderAllergenGrid() {
+  const grid = document.getElementById('allergenGrid');
+  grid.innerHTML = ALLERGEN_OPTIONS.map(a => `
+    <div class="check-item" onclick="toggleAllergen(this, '${a}')">
+      <input type="checkbox" id="allerg-${a}" onchange="toggleAllergen(this.parentElement, '${a}')">
+      <label for="allerg-${a}">${a}</label>
+    </div>
+  `).join('');
+}
+
+function toggleDietary(el, name) {
+  const cb = el.querySelector('input[type="checkbox"]');
+  const countInput = el.querySelector('.guest-count');
+  if (event.target !== cb) cb.checked = !cb.checked;
+  el.classList.toggle('checked', cb.checked);
+  countInput.style.display = cb.checked ? 'block' : 'none';
+  if (cb.checked) {
+    formState.dietary[name] = { checked: true, count: countInput.value };
+    countInput.focus();
+  } else {
+    delete formState.dietary[name];
+    countInput.value = '';
+  }
+}
+
+function toggleAllergen(el, name) {
+  const cb = el.querySelector('input[type="checkbox"]');
+  if (event.target !== cb) cb.checked = !cb.checked;
+  el.classList.toggle('checked', cb.checked);
+  if (cb.checked) formState.allergens.add(name);
+  else formState.allergens.delete(name);
+}
+
+function setToggle(group, value, btn) {
+  formState[group] = value;
+  btn.parentElement.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setDeliveryMode(mode, btn) {
+  formState.delivery = mode;
+  btn.parentElement.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const section = document.getElementById('deliveryFeeSection');
+  section.style.display = mode === 'delivery' ? 'block' : 'none';
+  if (mode !== 'delivery') {
+    document.getElementById('deliveryDistance').value = '';
+    document.getElementById('deliveryAddress').value = '';
+    document.getElementById('deliveryFeeDisplay').style.display = 'none';
+    formState.deliveryTier = null;
+  }
+}
+
+function updateDeliveryFee() {
+  const idx = document.getElementById('deliveryDistance').value;
+  const display = document.getElementById('deliveryFeeDisplay');
+  if (idx === '') {
+    display.style.display = 'none';
+    formState.deliveryTier = null;
+    return;
+  }
+  const tier = DELIVERY_FEES[idx];
+  formState.deliveryTier = tier;
+  document.getElementById('feeAmount').textContent = tier.fee === null ? 'Custom' : tier.fee === 0 ? 'FREE' : '$' + tier.fee.toFixed(2);
+  document.getElementById('feeNote').textContent = tier.note || tier.label;
+  display.style.display = 'block';
+}
+
+function populateDeliveryDropdown() {
+  const sel = document.getElementById('deliveryDistance');
+  DELIVERY_FEES.forEach((tier, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = tier.label + (tier.fee === null ? '' : tier.fee === 0 ? ' — Free' : ' — $' + tier.fee.toFixed(2));
+    sel.appendChild(opt);
+  });
+}
+
+// ===== DISTANCE CALCULATION =====
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 3959; // Earth radius in miles
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+async function calculateDeliveryFee() {
+  const address = document.getElementById('deliveryAddress').value.trim();
+  if (!address) { alert('Please enter a delivery address first.'); return; }
+
+  const btn = document.getElementById('calcFeeBtn');
+  btn.textContent = 'CALCULATING...';
+  btn.disabled = true;
+
+  try {
+    const resp = await fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address) + '&limit=1&countrycodes=us');
+    const results = await resp.json();
+
+    if (!results.length) {
+      alert('Could not find that address. Please try a more specific address or select the distance manually.');
+      return;
+    }
+
+    const lat = parseFloat(results[0].lat);
+    const lon = parseFloat(results[0].lon);
+    const straightLine = haversineDistance(RESTAURANT_COORDS.lat, RESTAURANT_COORDS.lng, lat, lon);
+    const estDriving = straightLine * ROAD_FACTOR;
+    const rounded = Math.round(estDriving * 10) / 10;
+
+    // Find matching tier
+    const tierIdx = DELIVERY_FEES.findIndex(t => estDriving >= t.min && estDriving < t.max);
+    if (tierIdx >= 0) {
+      document.getElementById('deliveryDistance').value = tierIdx;
+      updateDeliveryFee();
+      // Show estimated distance in the note
+      document.getElementById('feeNote').textContent = '~' + rounded + ' miles from Kedai Makan';
+    }
+  } catch (err) {
+    alert('Could not calculate distance. Please select the distance manually.');
+  } finally {
+    btn.textContent = 'CALCULATE FEE';
+    btn.disabled = false;
+  }
+}
+
+// ===== VALIDATION =====
+function validate() {
+  let valid = true;
+  const checks = [
+    { id: 'fullName', errorId: 'fullNameError', test: v => v.trim().length > 0 },
+    { id: 'email', errorId: 'emailError', test: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+    { id: 'eventDate', errorId: 'eventDateError', test: v => v.length > 0 },
+    { id: 'guestCount', errorId: 'guestCountError', test: v => parseInt(v) > 0 }
+  ];
+
+  checks.forEach(c => {
+    const input = document.getElementById(c.id);
+    const error = document.getElementById(c.errorId);
+    if (!c.test(input.value)) {
+      input.classList.add('field-error');
+      error.classList.add('show');
+      valid = false;
+    } else {
+      input.classList.remove('field-error');
+      error.classList.remove('show');
+    }
+  });
+
+  return valid;
+}
+
+// ===== GENERATE SUMMARY =====
+function generateSummary() {
+  const name = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const eventDate = document.getElementById('eventDate').value;
+  const eventTime = document.getElementById('eventTime').value;
+  const guests = document.getElementById('guestCount').value;
+  const eventType = document.getElementById('eventType').value;
+  const venue = document.getElementById('venue').value.trim();
+  const budget = document.getElementById('budget').value;
+  const menuPrefs = document.getElementById('menuPrefs').value.trim();
+  const otherNotes = document.getElementById('otherNotes').value.trim();
+  const allergyNotes = document.getElementById('allergyNotes').value.trim();
+
+  const formatLabels = { family: 'Family Style (Trays)', boxed: 'Individual Boxed Meals', unsure: 'Not Sure Yet' };
+
+  let s = '';
+  s += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+  s += 'KEDAI MAKAN — CATERING INQUIRY\n';
+  s += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+
+  s += '--- Contact ---\n';
+  s += `  Name: ${name}\n`;
+  s += `  Email: ${email}\n`;
+  if (phone) s += `  Phone: ${phone}\n`;
+  if (company) s += `  Company: ${company}\n`;
+  s += '\n';
+
+  s += '--- Event Details ---\n';
+  if (eventDate) {
+    const d = new Date(eventDate + 'T00:00');
+    s += `  Date: ${d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}`;
+    if (eventTime) s += ` at ${eventTime}`;
+    s += '\n';
+  }
+  s += `  Guests: ${guests}\n`;
+  if (eventType) s += `  Event Type: ${eventType}\n`;
+  if (venue) s += `  Venue: ${venue}\n`;
+  s += `  Format: ${formatLabels[formState.format]}\n`;
+  const deliveryLabels = { delivery: 'Delivery', pickup: 'Pickup', inhouse: 'In-House' };
+  s += `  Service: ${deliveryLabels[formState.delivery]}\n`;
+  if (formState.delivery === 'delivery') {
+    const addr = document.getElementById('deliveryAddress').value.trim();
+    if (formState.deliveryTier) {
+      const t = formState.deliveryTier;
+      s += `  Distance: ${t.label}\n`;
+      s += `  Delivery Fee: ${t.fee === null ? 'Contact for quote' : t.fee === 0 ? 'Free' : '$' + t.fee.toFixed(2)}\n`;
+    }
+    if (addr) s += `  Delivery Address: ${addr}\n`;
+  }
+  s += '\n';
+
+  // Dietary
+  const dietaryEntries = Object.entries(formState.dietary).filter(([k, v]) => v.checked);
+  if (dietaryEntries.length > 0) {
+    s += '--- Dietary Needs ---\n';
+    dietaryEntries.forEach(([name, data]) => {
+      s += `  ${name}${data.count ? ': ' + data.count + ' guest(s)' : ''}\n`;
+    });
+    s += '\n';
+  }
+
+  // Allergens
+  if (formState.allergens.size > 0) {
+    s += '--- Allergens ---\n';
+    s += `  ${[...formState.allergens].join(', ')}\n`;
+    s += '\n';
+  }
+
+  if (allergyNotes) {
+    s += '--- Allergy / Dietary Notes ---\n';
+    s += `  ${allergyNotes}\n\n`;
+  }
+
+  if (budget) s += `Budget: ${budget}\n`;
+  if (menuPrefs) {
+    s += '--- Menu Preferences ---\n';
+    s += `  ${menuPrefs}\n\n`;
+  }
+  if (otherNotes) {
+    s += '--- Additional Notes ---\n';
+    s += `  ${otherNotes}\n\n`;
+  }
+
+  s += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+  s += 'Submitted via Kedai Makan Catering Inquiry Form\n';
+
+  return s;
+}
+
+// ===== SUBMISSION =====
+document.getElementById('intakeForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  if (!validate()) {
+    const firstError = document.querySelector('.field-error');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const submitBtn = document.querySelector('.btn-submit');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'SENDING...';
+
+  const summary = generateSummary();
+  const name = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const eventDate = document.getElementById('eventDate').value;
+  const d = new Date(eventDate + 'T00:00');
+  const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  try {
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: `Catering Inquiry — ${name} — ${dateStr}`,
+        from_name: name,
+        replyto: email,
+        message: summary
+      })
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      document.getElementById('successOverlay').classList.add('show');
+    } else {
+      alert('Something went wrong. Please try again or email us directly at ' + CATERING_EMAIL);
+    }
+  } catch (err) {
+    alert('Network error. Please try again or email us directly at ' + CATERING_EMAIL);
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'SUBMIT CATERING INQUIRY';
+});
+
+function closeSuccess() {
+  document.getElementById('successOverlay').classList.remove('show');
+}
+
+function submitAnother() {
+  document.getElementById('intakeForm').reset();
+  formState.format = 'unsure';
+  formState.delivery = 'delivery';
+  formState.dietary = {};
+  formState.allergens = new Set();
+
+  // Reset toggles
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-val="unsure"]').classList.add('active');
+  document.querySelectorAll('#deliveryToggle .toggle-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.val === 'delivery');
+  });
+
+  // Reset delivery section
+  formState.deliveryTier = null;
+  document.getElementById('deliveryFeeSection').style.display = 'block';
+  document.getElementById('deliveryDistance').value = '';
+  document.getElementById('deliveryAddress').value = '';
+  document.getElementById('deliveryFeeDisplay').style.display = 'none';
+
+  // Reset checkboxes
+  document.querySelectorAll('.check-item').forEach(el => {
+    el.classList.remove('checked');
+    el.querySelector('input[type="checkbox"]').checked = false;
+    const gc = el.querySelector('.guest-count');
+    if (gc) { gc.style.display = 'none'; gc.value = ''; }
+  });
+
+  // Clear errors
+  document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+  document.querySelectorAll('.error-msg').forEach(el => el.classList.remove('show'));
+
+  closeSuccess();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== INIT =====
+renderDietaryGrid();
+renderAllergenGrid();
+populateDeliveryDropdown();
+
+// Set min date to today
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('eventDate').setAttribute('min', today);
+</script>
+</body>
+</html>
