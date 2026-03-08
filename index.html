@@ -3,11 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Book Kedai Makan for your next event. Fill out our catering inquiry form to get started.">
-<meta property="og:title" content="Kedai Makan — Catering Inquiry">
-<meta property="og:description" content="Southeast Asian catering in Seattle. Fill out our inquiry form to get a custom quote.">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍜</text></svg>">
 <title>Kedai Makan — Catering Inquiry</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
@@ -236,7 +231,7 @@ select { cursor:pointer; appearance:none; background-image:url("data:image/svg+x
         <div class="check-grid" id="dietaryGrid"></div>
       </div>
       <div class="form-group" style="margin-top:20px">
-        <label>Allergens <span style="font-weight:400;text-transform:none;letter-spacing:0">(check all that apply)</span></label>
+        <label>Allergens <span style="font-weight:400;text-transform:none;letter-spacing:0">(check all that apply, enter # of guests)</span></label>
         <div class="check-grid" id="allergenGrid"></div>
       </div>
       <div class="form-group" style="margin-top:16px">
@@ -347,7 +342,7 @@ const formState = {
   delivery: 'delivery',
   deliveryTier: null,
   dietary: {},
-  allergens: new Set()
+  allergens: {}
 };
 
 // ===== RENDER GRIDS =====
@@ -369,6 +364,8 @@ function renderAllergenGrid() {
     <div class="check-item" onclick="toggleAllergen(this, '${a}')">
       <input type="checkbox" id="allerg-${a}" onchange="toggleAllergen(this.parentElement, '${a}')">
       <label for="allerg-${a}">${a}</label>
+      <input type="number" class="guest-count" min="0" placeholder="#" style="display:none"
+        id="allergCount-${a}" oninput="formState.allergens['${a}']={checked:true,count:this.value}" onclick="event.stopPropagation()">
     </div>
   `).join('');
 }
@@ -390,10 +387,17 @@ function toggleDietary(el, name) {
 
 function toggleAllergen(el, name) {
   const cb = el.querySelector('input[type="checkbox"]');
+  const countInput = el.querySelector('.guest-count');
   if (event.target !== cb) cb.checked = !cb.checked;
   el.classList.toggle('checked', cb.checked);
-  if (cb.checked) formState.allergens.add(name);
-  else formState.allergens.delete(name);
+  countInput.style.display = cb.checked ? 'block' : 'none';
+  if (cb.checked) {
+    formState.allergens[name] = { checked: true, count: countInput.value };
+    countInput.focus();
+  } else {
+    delete formState.allergens[name];
+    countInput.value = '';
+  }
 }
 
 function setToggle(group, value, btn) {
@@ -580,9 +584,12 @@ function generateSummary() {
   }
 
   // Allergens
-  if (formState.allergens.size > 0) {
+  const allergenEntries = Object.entries(formState.allergens).filter(([k, v]) => v.checked);
+  if (allergenEntries.length > 0) {
     s += '--- Allergens ---\n';
-    s += `  ${[...formState.allergens].join(', ')}\n`;
+    allergenEntries.forEach(([name, data]) => {
+      s += `  ${name}${data.count ? ': ' + data.count + ' guest(s)' : ''}\n`;
+    });
     s += '\n';
   }
 
@@ -663,7 +670,7 @@ function submitAnother() {
   formState.format = 'unsure';
   formState.delivery = 'delivery';
   formState.dietary = {};
-  formState.allergens = new Set();
+  formState.allergens = {};
 
   // Reset toggles
   document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
