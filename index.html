@@ -285,7 +285,7 @@ select { cursor:pointer; appearance:none; background-image:url("data:image/svg+x
           </select>
         </div>
       </div>
-      <div class="form-group" style="margin-top:20px">
+      <div class="form-group" id="utensilSection" style="margin-top:20px">
         <label>Serving Utensils <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional, enter quantity needed)</span></label>
         <div class="check-grid" id="utensilGrid"></div>
       </div>
@@ -449,11 +449,21 @@ function setDeliveryMode(mode, btn) {
   btn.classList.add('active');
   const section = document.getElementById('deliveryFeeSection');
   section.style.display = mode === 'delivery' ? 'block' : 'none';
+  document.getElementById('utensilSection').style.display = mode === 'inhouse' ? 'none' : 'block';
   if (mode !== 'delivery') {
     document.getElementById('deliveryDistance').value = '';
     document.getElementById('deliveryAddress').value = '';
     document.getElementById('deliveryFeeDisplay').style.display = 'none';
     formState.deliveryTier = null;
+  }
+  if (mode === 'inhouse') {
+    formState.utensils = {};
+    document.querySelectorAll('#utensilGrid .check-item').forEach(el => {
+      el.classList.remove('checked');
+      el.querySelector('input[type="checkbox"]').checked = false;
+      const gc = el.querySelector('.guest-count');
+      if (gc) { gc.style.display = 'none'; gc.value = ''; }
+    });
   }
 }
 
