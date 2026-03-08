@@ -285,6 +285,10 @@ select { cursor:pointer; appearance:none; background-image:url("data:image/svg+x
           </select>
         </div>
       </div>
+      <div class="form-group" style="margin-top:20px">
+        <label>Serving Utensils <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional, enter quantity needed)</span></label>
+        <div class="check-grid" id="utensilGrid"></div>
+      </div>
       <div class="form-group">
         <label>Menu Preferences / Must-Haves</label>
         <textarea id="menuPrefs" placeholder="e.g. We'd love Nasi Lemak as the main, and something sweet for dessert..."></textarea>
@@ -342,7 +346,8 @@ const formState = {
   delivery: 'delivery',
   deliveryTier: null,
   dietary: {},
-  allergens: {}
+  allergens: {},
+  utensils: {}
 };
 
 // ===== RENDER GRIDS =====
@@ -396,6 +401,38 @@ function toggleAllergen(el, name) {
     countInput.focus();
   } else {
     delete formState.allergens[name];
+    countInput.value = '';
+  }
+}
+
+const UTENSIL_OPTIONS = [
+  { id: 'spoon', label: 'Serving Spoon ($0.50/ea)' },
+  { id: 'tongs', label: 'Serving Tongs ($1.00/ea)' }
+];
+
+function renderUtensilGrid() {
+  const grid = document.getElementById('utensilGrid');
+  grid.innerHTML = UTENSIL_OPTIONS.map(u => `
+    <div class="check-item" onclick="toggleUtensil(this, '${u.id}')">
+      <input type="checkbox" id="utensil-${u.id}" onchange="toggleUtensil(this.parentElement, '${u.id}')">
+      <label for="utensil-${u.id}">${u.label}</label>
+      <input type="number" class="guest-count" min="0" placeholder="#" style="display:none"
+        id="utensilCount-${u.id}" oninput="formState.utensils['${u.id}']={checked:true,count:this.value}" onclick="event.stopPropagation()">
+    </div>
+  `).join('');
+}
+
+function toggleUtensil(el, name) {
+  const cb = el.querySelector('input[type="checkbox"]');
+  const countInput = el.querySelector('.guest-count');
+  if (event.target !== cb) cb.checked = !cb.checked;
+  el.classList.toggle('checked', cb.checked);
+  countInput.style.display = cb.checked ? 'block' : 'none';
+  if (cb.checked) {
+    formState.utensils[name] = { checked: true, count: countInput.value };
+    countInput.focus();
+  } else {
+    delete formState.utensils[name];
     countInput.value = '';
   }
 }
@@ -598,6 +635,17 @@ function generateSummary() {
     s += `  ${allergyNotes}\n\n`;
   }
 
+  // Serving Utensils
+  const utensilEntries = Object.entries(formState.utensils).filter(([k, v]) => v.checked);
+  if (utensilEntries.length > 0) {
+    const utensilLabels = { spoon: 'Serving Spoon ($0.50/ea)', tongs: 'Serving Tongs ($1.00/ea)' };
+    s += '--- Serving Utensils ---\n';
+    utensilEntries.forEach(([name, data]) => {
+      s += `  ${utensilLabels[name] || name}${data.count ? ': ' + data.count : ''}\n`;
+    });
+    s += '\n';
+  }
+
   if (budget) s += `Budget: ${budget}\n`;
   if (menuPrefs) {
     s += '--- Menu Preferences ---\n';
@@ -671,6 +719,7 @@ function submitAnother() {
   formState.delivery = 'delivery';
   formState.dietary = {};
   formState.allergens = {};
+  formState.utensils = {};
 
   // Reset toggles
   document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
@@ -705,6 +754,7 @@ function submitAnother() {
 // ===== INIT =====
 renderDietaryGrid();
 renderAllergenGrid();
+renderUtensilGrid();
 populateDeliveryDropdown();
 
 // Set min date to today
