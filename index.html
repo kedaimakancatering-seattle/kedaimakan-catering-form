@@ -234,9 +234,10 @@ select { cursor:pointer; appearance:none; background-image:url("data:image/svg+x
       <div class="form-group">
         <label>Dietary Needs <span style="font-weight:400;text-transform:none;letter-spacing:0">(check all that apply, enter # of guests)</span></label>
         <div class="check-grid" id="dietaryGrid"></div>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:10px;line-height:1.5">Note: Kedai Makan is not a dedicated halal kitchen and we do not serve halal meat.</p>
       </div>
       <div class="form-group" style="margin-top:20px">
-        <label>Allergens <span style="font-weight:400;text-transform:none;letter-spacing:0">(check all that apply)</span></label>
+        <label>Allergens <span style="font-weight:400;text-transform:none;letter-spacing:0">(check all that apply, enter # of guests)</span></label>
         <div class="check-grid" id="allergenGrid"></div>
       </div>
       <div class="form-group" style="margin-top:16px">
@@ -289,6 +290,10 @@ select { cursor:pointer; appearance:none; background-image:url("data:image/svg+x
             <option value="">Select distance...</option>
           </select>
         </div>
+      </div>
+      <div class="form-group" id="utensilSection" style="margin-top:20px">
+        <label>Serving Utensils <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional, enter quantity needed)</span></label>
+        <div class="check-grid" id="utensilGrid"></div>
       </div>
       <div class="form-group">
         <label>Menu Preferences / Must-Haves</label>
@@ -347,7 +352,8 @@ const formState = {
   delivery: 'delivery',
   deliveryTier: null,
   dietary: {},
-  allergens: new Set()
+  allergens: {},
+  utensils: {}
 };
 
 // ===== RENDER GRIDS =====
@@ -369,6 +375,8 @@ function renderAllergenGrid() {
     <div class="check-item" onclick="toggleAllergen(this, '${a}')">
       <input type="checkbox" id="allerg-${a}" onchange="toggleAllergen(this.parentElement, '${a}')">
       <label for="allerg-${a}">${a}</label>
+      <input type="number" class="guest-count" min="0" placeholder="#" style="display:none"
+        id="allergCount-${a}" oninput="formState.allergens['${a}']={checked:true,count:this.value}" onclick="event.stopPropagation()">
     </div>
   `).join('');
 }
@@ -390,10 +398,49 @@ function toggleDietary(el, name) {
 
 function toggleAllergen(el, name) {
   const cb = el.querySelector('input[type="checkbox"]');
+  const countInput = el.querySelector('.guest-count');
   if (event.target !== cb) cb.checked = !cb.checked;
   el.classList.toggle('checked', cb.checked);
-  if (cb.checked) formState.allergens.add(name);
-  else formState.allergens.delete(name);
+  countInput.style.display = cb.checked ? 'block' : 'none';
+  if (cb.checked) {
+    formState.allergens[name] = { checked: true, count: countInput.value };
+    countInput.focus();
+  } else {
+    delete formState.allergens[name];
+    countInput.value = '';
+  }
+}
+
+const UTENSIL_OPTIONS = [
+  { id: 'spoon', label: 'Serving Spoon ($0.50/ea)' },
+  { id: 'tongs', label: 'Serving Tongs ($1.00/ea)' }
+];
+
+function renderUtensilGrid() {
+  const grid = document.getElementById('utensilGrid');
+  grid.innerHTML = UTENSIL_OPTIONS.map(u => `
+    <div class="check-item" onclick="toggleUtensil(this, '${u.id}')">
+      <input type="checkbox" id="utensil-${u.id}" onchange="toggleUtensil(this.parentElement, '${u.id}')">
+      <label for="utensil-${u.id}">${u.label}</label>
+      <input type="number" class="guest-count" min="0" placeholder="#" style="display:none"
+        id="utensilCount-${u.id}" oninput="formState.utensils['${u.id}']={checked:true,count:this.value}" onclick="event.stopPropagation()">
+    </div>
+  `).join('');
+}
+
+function toggleUtensil(el, name) {
+  const cb = el.querySelector('input[type="checkbox"]');
+  const countInput = el.querySelector('.guest-count');
+  if (event.target !== cb) cb.checked = !cb.checked;
+  el.classList.toggle('checked', cb.checked);
+  countInput.style.display = cb.checked ? 'block' : 'none';
+  if (cb.checked) {
+    formState.utensils[name] = { checked: true, count: countInput.value };
+    countInput.focus();
+  } else {
+    delete formState.utensils[name];
+    countInput.value = '';
+  }
 }
 
 function setToggle(group, value, btn) {
@@ -408,11 +455,21 @@ function setDeliveryMode(mode, btn) {
   btn.classList.add('active');
   const section = document.getElementById('deliveryFeeSection');
   section.style.display = mode === 'delivery' ? 'block' : 'none';
+  document.getElementById('utensilSection').style.display = mode === 'inhouse' ? 'none' : 'block';
   if (mode !== 'delivery') {
     document.getElementById('deliveryDistance').value = '';
     document.getElementById('deliveryAddress').value = '';
     document.getElementById('deliveryFeeDisplay').style.display = 'none';
     formState.deliveryTier = null;
+  }
+  if (mode === 'inhouse') {
+    formState.utensils = {};
+    document.querySelectorAll('#utensilGrid .check-item').forEach(el => {
+      el.classList.remove('checked');
+      el.querySelector('input[type="checkbox"]').checked = false;
+      const gc = el.querySelector('.guest-count');
+      if (gc) { gc.style.display = 'none'; gc.value = ''; }
+    });
   }
 }
 
@@ -580,15 +637,29 @@ function generateSummary() {
   }
 
   // Allergens
-  if (formState.allergens.size > 0) {
+  const allergenEntries = Object.entries(formState.allergens).filter(([k, v]) => v.checked);
+  if (allergenEntries.length > 0) {
     s += '--- Allergens ---\n';
-    s += `  ${[...formState.allergens].join(', ')}\n`;
+    allergenEntries.forEach(([name, data]) => {
+      s += `  ${name}${data.count ? ': ' + data.count + ' guest(s)' : ''}\n`;
+    });
     s += '\n';
   }
 
   if (allergyNotes) {
     s += '--- Allergy / Dietary Notes ---\n';
     s += `  ${allergyNotes}\n\n`;
+  }
+
+  // Serving Utensils
+  const utensilEntries = Object.entries(formState.utensils).filter(([k, v]) => v.checked);
+  if (utensilEntries.length > 0) {
+    const utensilLabels = { spoon: 'Serving Spoon ($0.50/ea)', tongs: 'Serving Tongs ($1.00/ea)' };
+    s += '--- Serving Utensils ---\n';
+    utensilEntries.forEach(([name, data]) => {
+      s += `  ${utensilLabels[name] || name}${data.count ? ': ' + data.count : ''}\n`;
+    });
+    s += '\n';
   }
 
   if (budget) s += `Budget: ${budget}\n`;
@@ -663,7 +734,8 @@ function submitAnother() {
   formState.format = 'unsure';
   formState.delivery = 'delivery';
   formState.dietary = {};
-  formState.allergens = new Set();
+  formState.allergens = {};
+  formState.utensils = {};
 
   // Reset toggles
   document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
@@ -698,6 +770,7 @@ function submitAnother() {
 // ===== INIT =====
 renderDietaryGrid();
 renderAllergenGrid();
+renderUtensilGrid();
 populateDeliveryDropdown();
 
 // Set min date to today
