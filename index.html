@@ -182,8 +182,9 @@ select { cursor:pointer; appearance:none; background-image:url("data:image/svg+x
       <div class="form-row">
         <div class="form-group">
           <label class="required">Event Date</label>
-          <input type="date" id="eventDate" required>
+          <input type="date" id="eventDate" required onchange="checkRushFee()">
           <div class="error-msg" id="eventDateError">Please select an event date</div>
+          <div id="rushFeeNotice" style="display:none;padding:8px 12px;background:rgba(231,167,60,0.1);border:0.8px solid rgba(231,167,60,0.3);font-size:12px;color:#e7a73c;margin-top:6px;line-height:1.5">Catering within 72 hours will incur an additional planning fee of $20.</div>
         </div>
         <div class="form-group">
           <label>Event Time</label>
@@ -542,6 +543,17 @@ async function calculateDeliveryFee() {
   }
 }
 
+// ===== RUSH FEE CHECK =====
+function checkRushFee() {
+  const dateVal = document.getElementById('eventDate').value;
+  const notice = document.getElementById('rushFeeNotice');
+  if (!dateVal) { notice.style.display = 'none'; return; }
+  const eventDate = new Date(dateVal + 'T00:00');
+  const now = new Date();
+  const hoursUntil = (eventDate - now) / (1000 * 60 * 60);
+  notice.style.display = hoursUntil <= 72 ? 'block' : 'none';
+}
+
 // ===== VALIDATION =====
 function validate() {
   let valid = true;
@@ -611,6 +623,11 @@ function generateSummary() {
   s += `  Format: ${formatLabels[formState.format]}\n`;
   const deliveryLabels = { delivery: 'Delivery', pickup: 'Pickup', inhouse: 'In-House' };
   s += `  Service: ${deliveryLabels[formState.delivery]}\n`;
+  if (eventDate) {
+    const evtD = new Date(eventDate + 'T00:00');
+    const hoursUntil = (evtD - new Date()) / (1000 * 60 * 60);
+    if (hoursUntil <= 72) s += `  ⚠ Rush Order: +$20 planning fee (within 72 hours)\n`;
+  }
   if (formState.delivery === 'delivery') {
     const addr = document.getElementById('deliveryAddress').value.trim();
     if (formState.deliveryTier) {
